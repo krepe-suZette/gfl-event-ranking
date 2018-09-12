@@ -16,7 +16,7 @@ config = json.load(open("config.json", "r"))
 conn = pymysql.connect(**config)
 cur = conn.cursor()
 
-matplotlib.rc("font", family="Noto Sans CJK KR", size=16)
+matplotlib.rc("font", family="KoPubDotum", size=16)
 
 
 def interpolate(date, gets=[]):
@@ -84,7 +84,7 @@ def draw_per_score(file_name, gets=[0, 10, 30, 50]):
     for i in gets:
         plt.annotate(f"{i}%: 약 {int(xy[str(i)])}점", xy=(i + 2, int(xy[str(i)]) + 5000))
 
-    plt.subplots_adjust(left=0.08, bottom=0.08, right=0.96, top=0.92)
+    plt.subplots_adjust(left=0.12, bottom=0.08, right=0.92, top=0.92)
     plt.legend()
     plt.grid(True, which='major', linestyle='-', linewidth='1', alpha=0.5)
     plt.grid(True, which='minor', linestyle='-', linewidth='0.5', alpha=0.1)
