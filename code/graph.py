@@ -94,13 +94,16 @@ def draw_per_score(file_name, gets=[0, 10, 30, 50]):
     plt.savefig(f'../image/per_score/{fn}.png')
 
 
+def make_json(td=10):
+    date_list = [datetime.date(2018, 9, 1) + datetime.timedelta(days=n) for n in range(0, td)]
+    for date in date_list:
+        interpolate(date)
+        pass
+
+
 if __name__ == "__main__":
     st = time.time()
-
-    # date_list = [datetime.date(2018, 9, 1) + datetime.timedelta(days=n) for n in range(0, 9)]
-    # for date in date_list:
-    #     interpolate(date)
-    #     pass
+    make_json(10)
 
     for fn in glob.glob("../json/*.json"):
         draw_per_score(fn)
