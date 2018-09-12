@@ -29,7 +29,7 @@ def interpolate(date, gets=[]):
     cur.execute(sql, date)
     rows = cur.fetchall()
     if len(rows) < 10:
-        print(f"SKIP {date}")
+        print(f">>> SKIP {date}")
         return
     elif len(rows) < 28:
         k = 1
@@ -84,26 +84,32 @@ def draw_per_score(file_name, gets=[0, 10, 30, 50]):
     for i in gets:
         plt.annotate(f"{i}%: 약 {int(xy[str(i)])}점", xy=(i + 2, int(xy[str(i)]) + 5000))
 
-    plt.subplots_adjust(left=0.12, bottom=0.08, right=0.92, top=0.92)
+    plt.subplots_adjust(left=0.10, bottom=0.08, right=0.94, top=0.92)
     plt.legend()
     plt.grid(True, which='major', linestyle='-', linewidth='1', alpha=0.5)
     plt.grid(True, which='minor', linestyle='-', linewidth='0.5', alpha=0.1)
     plt.minorticks_on()
-    print(f">>> {time.time() - st} secs.")
     # plt.show()
     plt.savefig(f'../image/per_score/{fn}.png')
+    print(f">>> {time.time() - st} secs.")
+    return
 
 
-def make_json(td=10):
+def draw_date_score(dir_name, gets=[0, 10, 30, 50]):
+    # dir_name에는 보간값 있는 json 폴더 이름 적기
+    # WIP
+    return
+
+
+def make_json(td=21):
     date_list = [datetime.date(2018, 9, 1) + datetime.timedelta(days=n) for n in range(0, td)]
     for date in date_list:
         interpolate(date)
-        pass
 
 
 if __name__ == "__main__":
     st = time.time()
-    make_json(10)
+    make_json()
 
     for fn in glob.glob("../json/*.json"):
         draw_per_score(fn)
