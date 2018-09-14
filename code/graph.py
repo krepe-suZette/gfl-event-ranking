@@ -85,7 +85,7 @@ def ps_scatter(date, **kwargs):
         x, y = list(zip(*rdr))
         x = [int(n) for n in x]
         y = [int(n) for n in y]
-    plt.scatter(x, y, marker='s')
+    plt.scatter(x, y, **kwargs)
     # plt.show()
 
 
@@ -108,7 +108,7 @@ def draw_per_score(file_name, gets=[0, 10, 30, 50]):
     fn = os.path.splitext(os.path.split(file_name)[1])[0]
 
     # 그래프 기초 설정
-    plt.figure(figsize=(16, 9), dpi=80)
+    plt.figure(figsize=(16, 9), dpi=120)
     plt.ylabel("score")
     plt.xlabel("percent")
     plt.yticks(range(0, 1000001, 50000))
@@ -117,7 +117,7 @@ def draw_per_score(file_name, gets=[0, 10, 30, 50]):
     plt.title(f"소녀전선 한국서버 <돌풍구출> {fn} 분포 그래프")
 
     # 점, 그래프 그리기
-    # ps_scatter(fn)
+    # ps_scatter(fn, marker='s')
     ps_plot(fn, annotate=gets, label="예상 점수 그래프")
     # 가로선 그리기
     plt.axhline(270000, color='r', linewidth=1)
