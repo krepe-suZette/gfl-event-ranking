@@ -155,6 +155,6 @@ if __name__ == "__main__":
     st = time.time()
     make_data()
 
-    for fn in glob.glob("../data/*.json"):
+    for fn in glob.glob("../data/interpolate/*.csv"):
         draw_per_score(fn)
     print(f"total {time.time() - st} secs.")
