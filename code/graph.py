@@ -8,6 +8,7 @@ import pymysql
 import datetime
 import time
 import json
+import csv
 import os
 import glob
 
@@ -17,6 +18,26 @@ conn = pymysql.connect(**config)
 cur = conn.cursor()
 
 matplotlib.rc("font", family="KoPubDotum", size=16)
+
+
+# DB로부터 데이터 가공 및 저장
+
+def raw(date):
+    sql = (
+        "SELECT per, score FROM ranking "
+        "WHERE date = %s AND vaild > -1 "
+        "ORDER BY score DESC"
+    )
+    cur.execute(sql, date)
+    rows = cur.fetchall()
+    if len(rows) == 0:
+        print(f">>> raw: SKIP {date}")
+        return
+    with open(f'../data/raw/{date}.csv', 'w', encoding='utf-8', newline='') as f:
+        wr = csv.writer(f)
+        for row in rows:
+            wr.writerow(row)
+    return
 
 
 def interpolate(date, gets=[]):
@@ -29,7 +50,7 @@ def interpolate(date, gets=[]):
     cur.execute(sql, date)
     rows = cur.fetchall()
     if len(rows) < 10:
-        print(f">>> SKIP {date}")
+        print(f">>> int: SKIP {date}")
         return
     elif len(rows) < 28:
         k = 1
@@ -45,25 +66,49 @@ def interpolate(date, gets=[]):
     # 보간
     ipo1 = spi.splrep(x, y1, k=k)
     iy1 = (int(n) for n in spi.splev(range(0, 101), ipo1))
-    xy = dict(zip(range(0, 101), iy1))
 
     # 저장
-    json.dump(xy, open(f"../json/{date}.json", "w"), indent=2)
+    with open(f"../data/interpolate/{date}.csv", "w", encoding='utf-8', newline='') as f:
+        wr = csv.writer(f)
+        for row in zip(range(0, 101), iy1):
+            wr.writerow(row)
 
-    print(f">>> {time.time() - st} secs.")
+    print(f">>> int: {time.time() - st} secs.")
     return
 
 
+# figure 에 받은 데이터로 그래프 그리기
+
+def ps_scatter(date, **kwargs):
+    with open(f"../data/raw/{date}.csv", 'r', encoding='utf-8') as f:
+        rdr = csv.reader(f)
+        x, y = list(zip(*rdr))
+        x = [int(n) for n in x]
+        y = [int(n) for n in y]
+    plt.scatter(x, y, marker='s')
+    # plt.show()
+
+
+def ps_plot(date, annotate=[], **kwargs):
+    with open(f"../data/interpolate/{date}.csv", 'r', encoding='utf-8') as f:
+        rdr = csv.reader(f)
+        x, y = list(zip(*rdr))
+        x = [int(n) for n in x]
+        y = [int(n) for n in y]
+    plt.plot(x, y, **kwargs)
+
+    for i in annotate:
+        plt.annotate(f"{i}%: 약 {y[i]}점", xy=(i + 2, y[i] + 5000))
+
+
+# 별도 저장한 데이터 파일로부터 그래프 생성
+
 def draw_per_score(file_name, gets=[0, 10, 30, 50]):
     st = time.time()
-
-    # 파일 열기
-    xy = json.load(open(file_name, 'r'))
     fn = os.path.splitext(os.path.split(file_name)[1])[0]
-    x, y = list(zip(*[(int(x), y) for x, y in xy.items()]))
 
     # 그래프 기초 설정
-    plt.figure(figsize=(16, 9), dpi=120)
+    plt.figure(figsize=(16, 9), dpi=80)
     plt.ylabel("score")
     plt.xlabel("percent")
     plt.yticks(range(0, 1000001, 50000))
@@ -72,17 +117,13 @@ def draw_per_score(file_name, gets=[0, 10, 30, 50]):
     plt.title(f"소녀전선 한국서버 <돌풍구출> {fn} 분포 그래프")
 
     # 점, 그래프 그리기
-    # plt.scatter(x, y1, s=10, c='black', label='point')
-    plt.plot(x, y, label='예상 점수 그래프')
+    # ps_scatter(fn)
+    ps_plot(fn, annotate=gets, label="예상 점수 그래프")
     # 가로선 그리기
     plt.axhline(270000, color='r', linewidth=1)
     plt.axhline(88888, color='r', linewidth=1)
     plt.text(100, 270000, '4더미 무전투 점수 최대치 (270,000점)', ha="right", va="bottom")
     plt.text(100, 88888, '폭죽요정 확정 지급 점수 (88,888점)', ha="right", va="bottom")
-    # 설명 그리기
-    # plt.annotate(f"100등 : {int(xy[0])}점", xy=(0, int(xy[0])))
-    for i in gets:
-        plt.annotate(f"{i}%: 약 {int(xy[str(i)])}점", xy=(i + 2, int(xy[str(i)]) + 5000))
 
     plt.subplots_adjust(left=0.10, bottom=0.08, right=0.94, top=0.92)
     plt.legend()
@@ -101,16 +142,19 @@ def draw_date_score(dir_name, gets=[0, 10, 30, 50]):
     return
 
 
-def make_json(td=21):
+# 날짜별로 데이터 파일 만들기
+
+def make_data(td=21):
     date_list = [datetime.date(2018, 9, 1) + datetime.timedelta(days=n) for n in range(0, td)]
     for date in date_list:
         interpolate(date)
+        raw(date)
 
 
 if __name__ == "__main__":
     st = time.time()
-    make_json()
+    make_data()
 
-    for fn in glob.glob("../json/*.json"):
+    for fn in glob.glob("../data/*.json"):
         draw_per_score(fn)
     print(f"total {time.time() - st} secs.")
