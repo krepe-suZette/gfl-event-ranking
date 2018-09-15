@@ -246,6 +246,7 @@ def make_data(td=21):
     for date in date_list:
         interpolate(date)
         raw(date)
+    data_in100()
 
 
 if __name__ == "__main__":
