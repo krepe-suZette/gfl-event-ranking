@@ -77,6 +77,40 @@ def interpolate(date, gets=[]):
     return
 
 
+# 프리셋
+
+def preset_ps():
+    plt.figure(figsize=(16, 9), dpi=120)
+    plt.xlabel("percent")
+    plt.ylabel("score")
+    plt.xticks(range(0, 101, 5))
+    plt.yticks(range(0, 1050001, 50000))
+    plt.ylim(-1000, 1100000)
+    plt.subplots_adjust(left=0.10, bottom=0.08, right=0.94, top=0.92)
+    plt.grid(True, which='major', linestyle='-', linewidth='1', alpha=0.5)
+    plt.grid(True, which='minor', linestyle='-', linewidth='0.5', alpha=0.1)
+    plt.minorticks_on()
+
+
+def preset_ds():
+    dtmin = datetime.datetime(2018, 8, 25, hour=1)
+    dtmax = dtmin + datetime.timedelta(days=28)
+    dttk = [datetime.datetime(2018, 8, 26) + datetime.timedelta(days=n) for n in range(0, 27, 2)]
+    dttkif = [f"{n.month:0>2}-{n.day:0>2}" for n in dttk]
+
+    plt.figure(figsize=(16, 9), dpi=120)
+    plt.xlabel("date")
+    plt.ylabel("score")
+    plt.xticks(dttk, dttkif)
+    plt.yticks(range(0, 1050001, 50000))
+    plt.xlim(dtmin, dtmax)
+    plt.ylim(-1000, 1100000)
+    plt.subplots_adjust(left=0.10, bottom=0.08, right=0.88, top=0.92)
+    plt.grid(True, which='major', linestyle='-', linewidth='1', alpha=0.5)
+    plt.grid(True, which='minor', linestyle='-', linewidth='0.5', alpha=0.1)
+    plt.minorticks_on()
+
+
 # figure 에 받은 데이터로 그래프 그리기
 
 def ps_scatter(date, **kwargs):
