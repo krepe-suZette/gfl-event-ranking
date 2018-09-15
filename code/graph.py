@@ -184,35 +184,28 @@ def ds_plot_in100(gets=[], **kwargs):
 
 # 별도 저장한 데이터 파일로부터 그래프 생성
 
-def draw_per_score(file_name, gets=[0, 10, 30, 50]):
+def draw_per_score(date, gets=[0, 10, 30, 50]):
     st = time.time()
-    fn = os.path.splitext(os.path.split(file_name)[1])[0]
 
     # 그래프 기초 설정
-    plt.figure(figsize=(16, 9), dpi=120)
-    plt.ylabel("score")
-    plt.xlabel("percent")
-    plt.yticks(range(0, 1000001, 50000))
-    plt.ylim(-1000, 1010000)
-    plt.xticks(range(0, 101, 5))
-    plt.title(f"소녀전선 한국서버 <돌풍구출> {fn} 분포 그래프")
+    preset_ps()
+    plt.title(f"소녀전선 한국서버 <돌풍구출> {date} 분포 그래프")
 
     # 점, 그래프 그리기
-    # ps_scatter(fn, marker='s')
-    ps_plot(fn, annotate=gets, label="예상 점수 그래프")
+    ps_scatter(date, marker='s', label="전체 표본")
+    ps_plot(date, annotate=gets, label="예상 점수 그래프")
     # 가로선 그리기
     plt.axhline(270000, color='r', linewidth=1)
     plt.axhline(88888, color='r', linewidth=1)
-    plt.text(100, 270000, '4더미 무전투 점수 최대치 (270,000점)', ha="right", va="bottom")
-    plt.text(100, 88888, '폭죽요정 확정 지급 점수 (88,888점)', ha="right", va="bottom")
+    plt.text(100, 270000, '4더미 무전투 점수 최대치\n270,000점', ha="right", va="bottom", alpha=0.5)
+    plt.text(100, 88888, '폭죽요정 확정 지급 점수\n88,888점', ha="right", va="bottom", alpha=0.5)
 
-    plt.subplots_adjust(left=0.10, bottom=0.08, right=0.94, top=0.92)
+    # 범례
     plt.legend()
-    plt.grid(True, which='major', linestyle='-', linewidth='1', alpha=0.5)
-    plt.grid(True, which='minor', linestyle='-', linewidth='0.5', alpha=0.1)
-    plt.minorticks_on()
+
+    # 저장
     # plt.show()
-    plt.savefig(f'../image/per_score/{fn}.png')
+    plt.savefig(f'../image/per_score/{date}.png')
     print(f">>> {time.time() - st} secs.")
     return
 
