@@ -11,6 +11,7 @@ import json
 import csv
 import os
 import glob
+import shutil
 
 config = json.load(open("config.json", "r"))
 
@@ -235,6 +236,7 @@ def draw_date_score(gets=[0, 10, 30, 50]):
     # 저장
     # plt.show()
     plt.savefig(f'../image/date_score/{datetime.date.today()}.png')
+    shutil.copy(f'../image/date_score/{datetime.date.today()}.png', "../docs/recent.png")
     print(f">>> {time.time() - st} secs.")
     return
 
