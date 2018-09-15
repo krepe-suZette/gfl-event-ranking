@@ -210,9 +210,32 @@ def draw_per_score(date, gets=[0, 10, 30, 50]):
     return
 
 
-def draw_date_score(dir_name, gets=[0, 10, 30, 50]):
-    # dir_name에는 보간값 있는 json 폴더 이름 적기
-    # WIP
+def draw_date_score(gets=[0, 10, 30, 50]):
+    # dir_name 에는 보간값 있는 폴더 이름 적기
+    st = time.time()
+
+    # 프리셋 적용
+    preset_ds()
+    plt.title(f"소녀전선 한국서버 <돌풍구출> 등급컷 변화 그래프")
+
+    # 점, 그래프 그리기
+    ds_plot_in100([1, 10, 50, 100], marker='o', mfc='w')
+    ds_plot([10, 20, 30, 40, 50], marker='o', mfc='w')
+    # 가로선 그리기
+    plt.axhline(270000, color='r', linewidth=1, alpha=0.5)
+    plt.axhline(88888, color='r', linewidth=1, alpha=0.5)
+    plt.text(datetime.date(2018, 9, 21), 270000, '4더미 무전투 점수 최대치\n270,000점', ha="right", va="bottom", alpha=0.5, size=14)
+    plt.text(datetime.date(2018, 9, 21), 88888, '폭죽요정 확정 지급 점수\n88,888점', ha="right", va="bottom", alpha=0.5, size=14)
+
+    # 범례
+    plt.legend(bbox_to_anchor=(1, 0.5), loc="center left")
+    props = dict(boxstyle='round', alpha=0.5,)
+    plt.figtext(0.88, 0.04, "36베이스 카카오톡 봇으로 표본 조사중입니다. 많이 참여해주세요.", ha="right", va="top", alpha=0.5, size=12)
+
+    # 저장
+    plt.show()
+    # plt.savefig(f'../image/date_score/{datetime.date.today()}.png')
+    print(f">>> {time.time() - st} secs.")
     return
 
 
