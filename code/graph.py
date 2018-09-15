@@ -153,6 +153,35 @@ def ps_plot(date, annotate=[], **kwargs):
         plt.annotate(f"{i}%: 약 {y[i]}점", xy=(i + 2, y[i] + 5000))
 
 
+def ds_plot(gets=[0, 10, 30, 50], **kwargs):
+    file_list = glob.glob("../data/interpolate/*.csv")
+    data = dict([(n, []) for n in gets])
+    for file_name in file_list:
+        with open(file_name, 'r', encoding='utf-8') as f:
+            rdr = csv.reader(f)
+            date = os.path.splitext(os.path.split(file_name)[1])[0]
+            x, y = list(zip(*rdr))
+            x = [int(n) for n in x]
+            y = [int(n) for n in y]
+            for per in gets:
+                data[per].append((datetime.datetime.strptime(date, "%Y-%m-%d"), y[per]))
+    for per in gets:
+        x, y = list(zip(*data[per]))
+        plt.plot(x, y, label=f"{per}%", **kwargs)
+        plt.text(x[-1], y[-1] + 5000, f"{y[-1]}", size=8, ha="center", va="bottom", alpha=0.5)
+
+
+def ds_plot_in100(gets=[], **kwargs):
+    for rank in gets:
+        with open(f"../data/in100/{rank:0>3}.csv", 'r', encoding='utf-8') as f:
+            rdr = csv.reader(f)
+            x, y = list(zip(*rdr))
+            x = [datetime.datetime.strptime(n, "%Y-%m-%d") for n in x]
+            y = [int(n) for n in y]
+            plt.plot(x, y, label=f"{rank}등", **kwargs)
+            plt.text(x[-1], y[-1] + 5000, f"{y[-1]}", size=8, ha="center", va="bottom", alpha=0.5)
+
+
 # 별도 저장한 데이터 파일로부터 그래프 생성
 
 def draw_per_score(file_name, gets=[0, 10, 30, 50]):
