@@ -254,5 +254,7 @@ if __name__ == "__main__":
     make_data()
 
     for fn in glob.glob("../data/interpolate/*.csv"):
-        draw_per_score(fn)
+        date = os.path.splitext(os.path.split(fn)[1])[0]
+        draw_per_score(date)
+    draw_date_score()
     print(f"total {time.time() - st} secs.")
