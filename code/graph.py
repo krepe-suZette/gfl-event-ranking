@@ -77,6 +77,24 @@ def interpolate(date, gets=[]):
     return
 
 
+def data_in100():
+    st = time.time()
+    get_list = [1, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+    sql = (
+        'SELECT date, score FROM ranking '
+        'WHERE user_key = %s AND vaild > -1'
+    )
+    for rk in get_list:
+        cur.execute(sql, 'inRanking{0:0>3}'.format(rk))
+        rows = cur.fetchall()
+        with open(f"../data/in100/{rk:0>3}.csv", "w", encoding='utf-8', newline='') as f:
+            wr = csv.writer(f)
+            for row in rows:
+                wr.writerow(row)
+    print(f">>> in100: {time.time() - st} secs.")
+    return
+
+
 # 프리셋
 
 def preset_ps():
