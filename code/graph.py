@@ -157,7 +157,7 @@ def ps_plot(date, annotate=[], **kwargs):
 def ds_plot(gets=[0, 10, 30, 50], **kwargs):
     file_list = glob.glob("../data/interpolate/*.csv")
     data = dict([(n, []) for n in gets])
-    for file_name in file_list:
+    for file_name in sorted(file_list):
         with open(file_name, 'r', encoding='utf-8') as f:
             rdr = csv.reader(f)
             date = os.path.splitext(os.path.split(file_name)[1])[0]
@@ -185,7 +185,7 @@ def ds_plot_in100(gets=[], **kwargs):
 
 # 별도 저장한 데이터 파일로부터 그래프 생성
 
-def draw_per_score(date, gets=[0, 10, 30, 50]):
+def draw_per_score(date, gets=[0, 5, 10, 30, 50]):
     st = time.time()
 
     # 그래프 기초 설정
@@ -212,7 +212,7 @@ def draw_per_score(date, gets=[0, 10, 30, 50]):
     return
 
 
-def draw_date_score(gets=[0, 10, 30, 50]):
+def draw_date_score():
     # dir_name 에는 보간값 있는 폴더 이름 적기
     st = time.time()
 
@@ -222,7 +222,7 @@ def draw_date_score(gets=[0, 10, 30, 50]):
 
     # 점, 그래프 그리기
     ds_plot_in100([1, 10, 50, 100], marker='o', mfc='w')
-    ds_plot([10, 20, 30, 40, 50], marker='o', mfc='w')
+    ds_plot([5, 10, 15, 20, 30, 40, 50], marker='o', mfc='w')
     # 가로선 그리기
     plt.axhline(270000, color='r', linewidth=1, alpha=0.5)
     plt.axhline(88888, color='r', linewidth=1, alpha=0.5)
