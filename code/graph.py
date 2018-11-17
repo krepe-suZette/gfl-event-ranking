@@ -203,9 +203,9 @@ def preset_ps():
 
 
 def preset_ds():
-    dtmin = datetime.datetime(2018, 8, 25, hour=1)
-    dtmax = dtmin + datetime.timedelta(days=28)
-    dttk = [datetime.datetime(2018, 8, 26) + datetime.timedelta(days=n) for n in range(0, 27, 2)]
+    dtmin = datetime.datetime(2018, 11, 16, hour=1)
+    dtmax = dtmin + datetime.timedelta(days=16)
+    dttk = [datetime.datetime(2018, 11, 17) + datetime.timedelta(days=n) for n in range(0, 15, 1)]
     dttkif = [f"{n.month:0>2}-{n.day:0>2}" for n in dttk]
 
     plt.figure(figsize=(16, 9), dpi=120)
@@ -357,5 +357,5 @@ if __name__ == "__main__":
     for fn in glob.glob("../data/kr_deepdive/interpolate/*.csv"):
         date = os.path.splitext(os.path.split(fn)[1])[0]
         draw_per_score(date)
-    # draw_date_score()
+    draw_date_score()
     print(f"total {time.time() - st} secs.")
