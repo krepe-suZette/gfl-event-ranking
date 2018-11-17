@@ -75,7 +75,8 @@ def write_csv(path, rows):
 # 정렬. [(per, score), (...), ...] 형태로 넣을것
 # 이상한 값은 제거해서 돌려줌
 def sort_rows(rows: list):
-    sorted_rows = sorted(rows, reverse=True, key=lambda x: x[1])
+    sorted_rows = sorted(rows, key=lambda x: x[0])
+    sorted_rows = sorted(sorted_rows, reverse=True, key=lambda x: x[1])
     # except_set = set()
     for num, row in enumerate(sorted_rows):
         if num == 0:
