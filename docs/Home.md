@@ -8,4 +8,4 @@
 - 값이 부정확할 수 있습니다. 대략적인 개형만 봐주세요.
 
 ## 소녀전선 한국서버 <돌풍구출> 유저 분포도 목록
-[여기를 눌러서 확인하세요.](https://github.com/krepe-suZette/gfl-event-ranking/tree/master/image/per_score)
+[여기를 눌러서 확인하세요.](https://github.com/krepe-suZette/gfl-event-ranking/tree/master/image/)
