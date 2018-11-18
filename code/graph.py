@@ -21,7 +21,10 @@ cur = conn.cursor()
 matplotlib.rc("font", family="KoPubDotum", size=16)
 
 event_name = config["event_name"]
+Y_TICKS = 50000
 Y_LIMIT = 700000
+Y_LIMIT_ADV = 50000
+
 
 # 작성시 끝부분에 \n 써주세요. 
 PER_INFO = {
@@ -78,13 +81,15 @@ def sort_rows(rows: list):
     sorted_rows = sorted(rows, key=lambda x: x[0])
     sorted_rows = sorted(sorted_rows, reverse=True, key=lambda x: x[1])
     # except_set = set()
+    sorted_rows_len = len(sorted_rows)
+    except_list = []
     for num, row in enumerate(sorted_rows):
         if num == 0:
             if row[0] <= sorted_rows[num + 1][0]:
                 continue
             else:
-                sorted_rows.remove(row)
-        elif num < len(sorted_rows) - 1:
+                except_list.append(row)
+        elif num < sorted_rows_len - 1:
             # 내 양쪽 값이 같은지 확인
             if sorted_rows[num - 1][0] <= sorted_rows[num + 1][0]:
                 # 내 값이 양쪽 사이에 있는지 확인
@@ -93,15 +98,20 @@ def sort_rows(rows: list):
                     continue
                 else:
                     # 사이에 없다면 자기 자신을 문제목록에 추가
-                    sorted_rows.remove(row)
-            # 양쪽 값이 거꾸로 되어있다면 뒤쪽의 인덱스를 목록에 추가
+                    except_list.append(row)
+            # 양쪽부터 문제가 있는 경우
             else:
-                pass
+                if sorted_rows[num - 1][0] > row[0]:
+                    except_list.append(row)
+                else:
+                    pass
         else:
             if sorted_rows[num - 1][0] <= row[0]:
                 continue
             else:
-                sorted_rows.remove(row)
+                except_list.append(row)
+    for row in except_list:
+        sorted_rows.remove(row)
     return sorted_rows
 
 
@@ -194,8 +204,8 @@ def preset_ps():
     plt.xlabel("percent")
     plt.ylabel("score")
     plt.xticks(range(0, 101, 5))
-    plt.yticks(range(0, Y_LIMIT + 1, 50000))
-    plt.ylim(-1000, Y_LIMIT + 50000)
+    plt.yticks(range(0, Y_LIMIT + 1, Y_TICKS))
+    plt.ylim(-1000, Y_LIMIT + Y_LIMIT_ADV)
     plt.subplots_adjust(left=0.10, bottom=0.08, right=0.94, top=0.92)
     plt.grid(True, which='major', linestyle='-', linewidth='1', alpha=0.5)
     plt.grid(True, which='minor', linestyle='-', linewidth='0.5', alpha=0.1)
@@ -212,9 +222,9 @@ def preset_ds():
     plt.xlabel("date")
     plt.ylabel("score")
     plt.xticks(dttk, dttkif)
-    plt.yticks(range(0, Y_LIMIT + 1, 50000))
+    plt.yticks(range(0, Y_LIMIT + 1, Y_TICKS))
     plt.xlim(dtmin, dtmax)
-    plt.ylim(-1000, Y_LIMIT + 50000)
+    plt.ylim(-1000, Y_LIMIT + Y_LIMIT_ADV)
     plt.subplots_adjust(left=0.10, bottom=0.08, right=0.88, top=0.92)
     plt.grid(True, which='major', linestyle='-', linewidth='1', alpha=0.5)
     plt.grid(True, which='minor', linestyle='-', linewidth='0.5', alpha=0.1)
