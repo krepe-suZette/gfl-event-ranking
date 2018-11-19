@@ -78,7 +78,7 @@ def write_csv(path, rows):
 # 정렬. [(per, score), (...), ...] 형태로 넣을것
 # 이상한 값은 제거해서 돌려줌
 def sort_rows(rows: list):
-    sorted_rows = sorted(rows, key=lambda x: x[0])
+    sorted_rows = sorted(list(set(rows)), key=lambda x: x[0])
     sorted_rows = sorted(sorted_rows, reverse=True, key=lambda x: x[1])
     # except_set = set()
     sorted_rows_len = len(sorted_rows)
@@ -238,6 +238,16 @@ def draw_axhline(line, text):
     return
 
 
+def draw_axvspan(rows, score_min, score_max, **kwargs):
+    range_list = []
+    for row in rows:
+        if score_min <= row[1] <= score_max:
+            range_list.append(row[0])
+    range_list.sort()
+    if len(range_list) > 2:
+        plt.axvspan(range_list[0], range_list[-1], **kwargs)
+
+
 # figure 에 받은 데이터로 그래프 그리기
 
 def ps_scatter(date, **kwargs):
@@ -247,6 +257,7 @@ def ps_scatter(date, **kwargs):
         x = [int(n) for n in x]
         y = [int(n) for n in y]
     plt.scatter(x, y, **kwargs)
+    draw_axvspan(zip(x, y), 459, 459, color='gray', alpha=0.2)
     # plt.show()
 
 
@@ -312,7 +323,8 @@ def draw_per_score(date, gets=[0, 10, 20, 40, 50]):
     draw_axhline(400000, '최고등급 보상 확정지급 점수\n400,000점')
 
     # 범례
-    plt.legend()
+    plt.legend(loc=1)
+    plt.figtext(0.10, 0.04, "36베이스 - 소녀전선 데이터베이스 https://girlsfrontline.kr", ha="left", va="top", alpha=0.5, size=12)
     plt.figtext(0.94, 0.04, "구글 설문 및 36베이스 카카오톡 봇으로 표본 조사중입니다. 많이 참여해주세요.", ha="right", va="top", alpha=0.5, size=12)
 
     # 저장
@@ -339,6 +351,7 @@ def draw_date_score():
 
     # 범례
     plt.legend(bbox_to_anchor=(1, 0.5), loc="center left")
+    plt.figtext(0.10, 0.04, "36베이스 - 소녀전선 데이터베이스 https://girlsfrontline.kr", ha="left", va="top", alpha=0.5, size=12)
     plt.figtext(0.88, 0.04, "구글 설문 및 36베이스 카카오톡 봇으로 표본 조사중입니다. 많이 참여해주세요.", ha="right", va="top", alpha=0.5, size=12)
 
     # 저장
