@@ -12,4 +12,4 @@
 
 
 # License
-[`code`]](./code) 폴더 안에 있는 저작물에 대해서만 [MIT License](./code/LICENSE)가 적용됩니다.
+[`./code`](code) 폴더 안에 있는 저작물에 대해서만 [MIT License](./code/LICENSE)가 적용됩니다.
