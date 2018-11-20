@@ -9,3 +9,7 @@
 1. `Python 3.6` 또는 그 이상 버전이 필요합니다.
 2. `scipy`, `numpy`, `matplotlib` 패키지가 필요합니다.
 3. `KoPubDotum` 폰트가 필요합니다. [이 링크](http://www.kopus.org/biz/electronic/font.aspx)를 클릭하여 받으실 수 있습니다. 혹시 `matplotlib`에서 인식하지 못한다면 올바른 경로에 설치했는지 확인해주세요. 우분투의 경우 `/usr/share/fonts/truetype/` 아래에 ttf 파일이 있어야 합니다.
+
+
+# License
+[`code`]](./code) 폴더 안에 있는 저작물에 대해서만 [MIT License](./code/LICENSE)가 적용됩니다.
