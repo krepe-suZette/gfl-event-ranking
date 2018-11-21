@@ -101,10 +101,10 @@ def sort_rows(rows: list):
                     except_list.append(row)
             # 양쪽부터 문제가 있는 경우
             else:
-                if sorted_rows[num - 1][0] > row[0]:
-                    except_list.append(row)
+                if sorted_rows[num - 1][0] <= row[0] or row[0] <= sorted_rows[num + 1][0]:
+                    continue
                 else:
-                    pass
+                    except_list.append(row)
         else:
             if sorted_rows[num - 1][0] <= row[0]:
                 continue
