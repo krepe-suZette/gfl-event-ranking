@@ -4,3 +4,4 @@ venv
 code/config.json
 data/*/raw_google
 *.zip
+*.pyc
