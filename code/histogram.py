@@ -23,10 +23,13 @@ def main(date):
         x, y = list(zip(*rdr))
         x = [int(n) for n in x]
         y = [int(n) for n in y]
-    plt.hist(y, 16, range=(0, 800000))
+    ipo = spi.splrep(x, y, k=2)
+    iy = (int(n) for n in spi.splev(np.arange(0, 100.1, 0.1), ipo))
+    iy2 = list(iy)
+    plt.hist(iy2, 80, range=(0, 800000))
     plt.show()
     return
 
 
 if __name__ == "__main__":
-    main(datetime.date.today())
+    main(datetime.date(2018, 11, 21))

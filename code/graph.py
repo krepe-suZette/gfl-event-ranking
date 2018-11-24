@@ -75,20 +75,30 @@ def write_csv(path, rows):
     return
 
 
+def check_sorted_rows(rows: list) -> bool:
+    # 점수로 정렬, 이후 퍼센트로 다시 정렬
+    sorted_by_score = sorted(rows, reverse=True, key=lambda x: x[1])
+    sorted_by_per = sorted(sorted_by_score, key=lambda x: x[0])
+    # 같으면 참, 다르면 거짓 반환
+    if sorted_by_per == sorted_by_score:
+        return True
+    else:
+        return False
+
+
 # 정렬. [(per, score), (...), ...] 형태로 넣을것
 # 이상한 값은 제거해서 돌려줌
-def sort_rows(rows: list):
+def sort_rows(rows: list, rec=1):
     sorted_rows = sorted(list(set(rows)), key=lambda x: x[0])
     sorted_rows = sorted(sorted_rows, reverse=True, key=lambda x: x[1])
-    # except_set = set()
     sorted_rows_len = len(sorted_rows)
-    except_list = []
+    except_set = set()
     for num, row in enumerate(sorted_rows):
         if num == 0:
             if row[0] <= sorted_rows[num + 1][0]:
                 continue
             else:
-                except_list.append(row)
+                except_set.add(row)
         elif num < sorted_rows_len - 1:
             # 내 양쪽 값이 같은지 확인
             if sorted_rows[num - 1][0] <= sorted_rows[num + 1][0]:
@@ -98,20 +108,27 @@ def sort_rows(rows: list):
                     continue
                 else:
                     # 사이에 없다면 자기 자신을 문제목록에 추가
-                    except_list.append(row)
+                    except_set.add(row)
             # 양쪽부터 문제가 있는 경우
             else:
-                if sorted_rows[num - 1][0] <= row[0] or row[0] <= sorted_rows[num + 1][0]:
-                    continue
+                # 15 20 10 
+                # 양쪽에 문제가 있는데 뒤는 문제가 있지만 일단 앞쪽이랑 나는 문제 X
+                if sorted_rows[num - 1][0] <= row[0] and row[0] > sorted_rows[num + 1][0]:
+                    except_set.add(sorted_rows[num + 1])
+                # 양쪽에 문제가 있는데 앞은 문제있지만 나랑 다음애는 문제 X
+                elif row[0] <= sorted_rows[num + 1][0]:
+                    except_set.add(sorted_rows[num - 1])
                 else:
-                    except_list.append(row)
+                    except_set.add(row)
         else:
             if sorted_rows[num - 1][0] <= row[0]:
                 continue
             else:
-                except_list.append(row)
-    for row in except_list:
+                except_set.add(row)
+    for row in except_set:
         sorted_rows.remove(row)
+    if rec > 0 and not check_sorted_rows(sorted_rows):
+        sorted_rows = sort_rows(sorted_rows, rec - 1)
     return sorted_rows
 
 
