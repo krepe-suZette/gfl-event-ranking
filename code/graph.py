@@ -128,6 +128,7 @@ def sort_rows(rows: list, rec=1):
     for row in except_set:
         sorted_rows.remove(row)
     if rec > 0 and not check_sorted_rows(sorted_rows):
+        print(f"recursion count: {rec}")
         sorted_rows = sort_rows(sorted_rows, rec - 1)
     return sorted_rows
 
@@ -392,10 +393,11 @@ def make_data(td=15):
 if __name__ == "__main__":
     # __init__()
     st = time.time()
-    make_data(3)
+    make_data(15)
 
-    for fn in glob.glob("../data/kr_deepdive/interpolate/*.csv"):
-        date = os.path.splitext(os.path.split(fn)[1])[0]
-        draw_per_score(date)
+    # for fn in glob.glob("../data/kr_deepdive/interpolate/*.csv"):
+    #     date = os.path.splitext(os.path.split(fn)[1])[0]
+    #     draw_per_score(date)
+    draw_per_score(datetime.date.today())
     draw_date_score()
     print(f"total {time.time() - st} secs.")
